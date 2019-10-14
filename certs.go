@@ -11,14 +11,9 @@ import (
 )
 
 type Cert struct {
-	CommonName         string    `json:"cn"`
-	NotAfter           time.Time `json:"not_after"`
-	NotBefore          time.Time `json:"not_before"`
-	DNSNames           []string  `json:"dns_names"`
-	SignatureAlgorithm string    `json:"signature_algorithm"`
-	IssuerCommonName   string    `json:"issuer"`
-	Organizations      []string  `json:"organizations"`
-	ExpireAfter        float64   `json:"expiration"`
+	CommonName       string    `json:"cn"`
+	NotAfter         time.Time `json:"expires"`
+	IssuerCommonName string    `json:"issuer"`
 }
 
 func getVerifiedCertificateChains(addr string, timeoutSecond time.Duration) ([][]*x509.Certificate, error) {
@@ -43,14 +38,9 @@ func ParseRemoteCertificate(addr string, timeoutSecond int) (*Cert, error) {
 		for _, crt := range chain {
 			if !crt.IsCA {
 				cert = &Cert{
-					CommonName:         crt.Subject.CommonName,
-					NotAfter:           crt.NotAfter,
-					NotBefore:          crt.NotBefore,
-					DNSNames:           crt.DNSNames,
-					SignatureAlgorithm: crt.SignatureAlgorithm.String(),
-					IssuerCommonName:   crt.Issuer.CommonName,
-					Organizations:      crt.Issuer.Organization,
-					ExpireAfter:        time.Until(crt.NotAfter).Seconds(),
+					CommonName:       crt.Subject.CommonName,
+					NotAfter:         crt.NotAfter,
+					IssuerCommonName: crt.Issuer.CommonName,
 				}
 			}
 		}
@@ -69,14 +59,9 @@ func ParseCertificateFile(certFile string) (*Cert, error) {
 		return nil, err
 	}
 	return &Cert{
-		CommonName:         crt.Subject.CommonName,
-		NotAfter:           crt.NotAfter,
-		NotBefore:          crt.NotBefore,
-		DNSNames:           crt.DNSNames,
-		SignatureAlgorithm: crt.SignatureAlgorithm.String(),
-		IssuerCommonName:   crt.Issuer.CommonName,
-		Organizations:      crt.Issuer.Organization,
-		ExpireAfter:        time.Until(crt.NotAfter).Seconds(),
+		CommonName:       crt.Subject.CommonName,
+		NotAfter:         crt.NotAfter,
+		IssuerCommonName: crt.Issuer.CommonName,
 	}, err
 }
 
