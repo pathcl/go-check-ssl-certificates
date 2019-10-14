@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 
-	certs "github.com/hiroakis/go-check-ssl-certificates"
+	certs "github.com/pathcl/go-check-ssl-certificates"
 )
 
 func main() {
